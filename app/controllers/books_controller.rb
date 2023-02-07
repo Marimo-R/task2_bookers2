@@ -6,6 +6,7 @@ class BooksController < ApplicationController
   end
 
   def index
+    @book = Book.new
     @new_book = Book.new
     @books = Book.all
   end
@@ -17,12 +18,16 @@ class BooksController < ApplicationController
       redirect_to book_path(@book), notice: "You have created book successfully."
     else
       @books = Book.all
+      @new_book = Book.new
       render 'index'
     end
   end
 
   def edit
     @book = Book.find(params[:id])
+    if @book.user != current_user
+      redirect_to books_path
+    end
   end
 
   def update
